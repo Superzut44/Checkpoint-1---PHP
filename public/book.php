@@ -1,3 +1,20 @@
+<?php
+
+require_once __DIR__. '/../connec.php';
+$pdo = new PDO(DSN, USER, PASS);
+
+
+$query = 'SELECT name, payment FROM bride';
+$statement = $pdo->prepare($query);
+
+$statement->execute();
+
+$brides = $statement->fetchAll((PDO::FETCH_ASSOC));
+
+
+$total = 0;
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -24,7 +41,28 @@
             </div>
 
             <div class="page rightpage">
-                <!-- TODO : Display bribes and total paiement -->
+                <table>
+                    <caption>S</caption>
+                    <tbody>
+                        <?php foreach ($brides as $bride): ?>
+                            <?php $total += $bride['payment'] ?>
+                        <tr>
+                            <td><?= $bride['name'] ?></td>
+                            <td><?= $bride['payment'] ?>€</td>
+                        </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Total</th>
+                            <th><?= $total ?>€</th>
+                        </tr>
+                    </tfoot>
+                        <tr><?= $total ?></tr>
+
+                        
+                    </table>
+                
             </div>
         </div>
         <img src="image/inkpen.png" alt="an ink pen" class="inkpen"/>
