@@ -12,7 +12,7 @@ $statement->execute();
 $brides = $statement->fetchAll((PDO::FETCH_ASSOC));
 
 
-$total = 0;
+
 ?>
 
 <!doctype html>
@@ -37,15 +37,27 @@ $total = 0;
         <div class="pages">
             <div class="page leftpage">
                 Add a bribe
-                <!-- TODO : Form -->
+                <form action="" method="POST" class="form">
+                    <div class="form-name">
+                        <label for="name">Name: </label>
+                        <input type="text" name="name" id="name" required>
+                    </div>
+                    <div class="form-payment">
+                        <label for="payment">Payment: </label>
+                        <input type="number" name="payment" id="payment" required>
+                    </div>
+                    <div class="form-submit">
+                        <input type="submit" value="Pay!">
+                    </div>
+                </form>
             </div>
 
             <div class="page rightpage">
-                <table>
+                <table class="table">
                     <caption>S</caption>
                     <tbody>
-                        <?php foreach ($brides as $bride): ?>
-                            <?php $total += $bride['payment'] ?>
+                        <?php $total=0 ?>
+                        <?php foreach ($brides as $bride): $total += $bride['payment']?>
                         <tr>
                             <td><?= $bride['name'] ?></td>
                             <td><?= $bride['payment'] ?>€</td>
@@ -58,11 +70,7 @@ $total = 0;
                             <th><?= $total ?>€</th>
                         </tr>
                     </tfoot>
-                        <tr><?= $total ?></tr>
-
-                        
-                    </table>
-                
+                </table>
             </div>
         </div>
         <img src="image/inkpen.png" alt="an ink pen" class="inkpen"/>
