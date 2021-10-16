@@ -4,14 +4,41 @@ require_once __DIR__. '/../connec.php';
 $pdo = new PDO(DSN, USER, PASS);
 
 
+
+$errors = [];
+
+if ($_SERVER["REQUEST_METHOD"] === 'POST') {
+
+    $name = $_POST['name'];
+    $payment = $_POST['payment'];
+
+    if (empty($name)) {
+        $errors[] = 'The name is required !';
+    }
+    if (empty($payment)) {
+        $errors[] = 'The payment is required !';
+    }
+    if (!empty($payment) && $payment <= 0) {
+        $errors[] = 'Payment of 0 or less not possible !';
+    }
+    if (empty($errors)) {
+        
+        $pdo = new PDO(DSN, USER, PASS);
+        $query = 'INSERT INTO bride(name, payment) VALUES (:name, :payment)';
+        $statement = $pdo->prepare($query);
+        $statement->bindValue(':name', $name , PDO::PARAM_STR);
+        $statement->bindValue(':payment', $payment, PDO::PARAM_INT);
+        $statement->execute();
+
+        header('Location: /book.php');
+        exit();
+    }
+}
+
 $query = 'SELECT name, payment FROM bride';
 $statement = $pdo->prepare($query);
-
 $statement->execute();
-
 $brides = $statement->fetchAll((PDO::FETCH_ASSOC));
-
-
 
 ?>
 
@@ -37,14 +64,17 @@ $brides = $statement->fetchAll((PDO::FETCH_ASSOC));
         <div class="pages">
             <div class="page leftpage">
                 Add a bribe
+                <?php foreach ($errors as $error) : ?>
+                <p><?= $error ?></p>
+                <?php endforeach; ?>
                 <form action="" method="POST" class="form">
                     <div class="form-name">
-                        <label for="name">Name: </label>
-                        <input type="text" name="name" id="name" required>
+                        <label for="name">Name: </label></br>
+                        <input type="text" name="name" id="name" value="<?= $name ?? '' ?>" >
                     </div>
                     <div class="form-payment">
-                        <label for="payment">Payment: </label>
-                        <input type="number" name="payment" id="payment" required>
+                        <label for="payment">Payment: </label></br>
+                        <input type="number" name="payment" id="payment" value="<?= $payment ?? '' ?>" >
                     </div>
                     <div class="form-submit">
                         <input type="submit" value="Pay!">
