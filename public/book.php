@@ -56,6 +56,13 @@ $brides = $statement->fetchAll((PDO::FETCH_ASSOC));
 <?php include 'header.php'; ?>
 
 <main class="container">
+    <nav class="navbarAlphabetical">
+        <?php $letters = range ( 'A', 'Z' );
+              $letterChosen = "S";
+              foreach ( $letters as $letter ): ?>
+        <a href="?letter=<?= $letter ?>" ><?= $letter ?></a>
+        <?php endforeach; ?>
+    </nav>
 
     <section class="desktop">
         <img src="image/whisky.png" alt="a whisky glass" class="whisky"/>
