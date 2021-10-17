@@ -1,8 +1,6 @@
 <?php
 
 require_once __DIR__. '/../connec.php';
-$pdo = new PDO(DSN, USER, PASS);
-
 
 
 $errors = [];
@@ -14,6 +12,9 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
     if (empty($name)) {
         $errors[] = 'The name is required !';
+    }
+    if (strtoupper($name) === "ELIOTT NESS") {
+        $errors[] = 'This man is untouchable';
     }
     if (empty($payment)) {
         $errors[] = 'The payment is required !';
@@ -34,6 +35,14 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         exit();
     }
 }
+
+$letterChosen = "S";
+if (isset($_SERVER['QUERY_STRING'])) {
+    $letterChosen = $_SERVER['QUERY_STRING'];
+    $letterChosen = $letterChosen[7];
+}
+
+$pdo = new PDO(DSN, USER, PASS);
 
 $query = 'SELECT name, payment FROM bride';
 $statement = $pdo->prepare($query);
@@ -58,7 +67,6 @@ $brides = $statement->fetchAll((PDO::FETCH_ASSOC));
 <main class="container">
     <nav class="navbarAlphabetical">
         <?php $letters = range ( 'A', 'Z' );
-              $letterChosen = "S";
               foreach ( $letters as $letter ): ?>
         <a href="?letter=<?= $letter ?>" ><?= $letter ?></a>
         <?php endforeach; ?>
