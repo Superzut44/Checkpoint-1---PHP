@@ -84,7 +84,7 @@ $brides = $statement->fetchAll((PDO::FETCH_ASSOC));
 
             <div class="page rightpage">
                 <table class="table">
-                    <caption>S</caption>
+                    <caption><?= $letterChosen ?></caption>
                     <tbody>
                         <?php $total=0 ?>
                         <?php foreach ($brides as $bride): $total += $bride['payment']?>
