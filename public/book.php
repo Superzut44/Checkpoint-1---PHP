@@ -44,7 +44,7 @@ if (isset($_SERVER['QUERY_STRING'])) {
 
 $pdo = new PDO(DSN, USER, PASS);
 
-$query = 'SELECT name, payment FROM bride';
+$query = "SELECT name, payment FROM bride WHERE name LIKE '$letterChosen%'" ;
 $statement = $pdo->prepare($query);
 $statement->execute();
 $brides = $statement->fetchAll((PDO::FETCH_ASSOC));
